@@ -1,0 +1,231 @@
+import { DayCycle } from "@/components/case-study/DayCycle";
+
+export const Demo = () => <DayCycle />;
+
+export const meta = {
+  demo: {
+    type: "custom",
+  },
+  facts: [
+    { label: "Role", value: "Product Manager" },
+    { label: "Timeline", value: "~3 weeks" },
+    { label: "Worked with", value: "Category, Supply Chain, Dark Store Ops, Pricing" },
+    { label: "Tools", value: "Python, SQL, BI dashboards, price elasticity model" },
+  ],
+  metrics: [
+    { value: "$13K/day", label: "write-offs eliminated" },
+    { value: "~43%", label: "CPO reduction across markets" },
+    { value: "~50%", label: "reduction in disposal rate" },
+    { value: "8", label: "categories, scaled from FNV to all of Fresh" },
+  ],
+  tldr: {
+    problem:
+      "Every night, short shelf-life stock expired and was thrown away as a total loss. No trigger, no recovery, just manual work per store, per SKU.",
+    did:
+      "Built an end-to-end engine (design, code, deployment and post-launch, across both markets) that boosts visibility first, then reprices hourly against sell-through curves inside margin floors.",
+    result:
+      "$13K/day in write-offs eliminated on perishables that drive 50% of platform GMV, with CPO down ~43% and disposal rate down ~50%.",
+  },
+  sections: [
+    "What 12 AM looked like before",
+    "Four levers, every evening",
+    "6 PM: visibility before price",
+    "8 PM: what to act on",
+    "8 PM: recovering margin",
+    "Markdown depth, hour by hour",
+    "Guardrails",
+    "A separate expected-sale model",
+    "Results",
+    "What I'd build next",
+  ],
+  signoff: "Built at Noon · 2025",
+};
+
+## What 12 AM looked like before
+
+Every night, low keep-life SKUs reached expiry and were disposed of as a total loss. No secondary channel, no recovery. The loss was a daily certainty, and it grew with every forecast error that caused an over-order earlier in the day.
+
+- No automated trigger of any kind
+- Manual intervention per store, per SKU, every night
+- Expiring SKUs disposed of as a total loss
+- Disposal costs reaching double digits as a percentage of fresh GMV
+- Loss compounding with every over-order
+- No way to recover category margin
+
+<Callout tone="question" label="The goal">
+  Find near-expiry stock automatically, boost its visibility to pull in demand, and re-price the rest to clear it, without eroding category margin.
+</Callout>
+
+## Four levers, every evening
+
+Each module makes one decision. Together they run on the clock from 6 PM to midnight.
+
+<Steps
+  items={[
+    { title: "Impression boost", tag: "6 PM", body: "At-risk SKUs promoted in search and listings. No price change, no markdown signal." },
+    { title: "Eligibility + quantity", tag: "8 PM", body: "Every SKU × store checked: what is expiring, what is underforecasted, and how much to act on." },
+    { title: "Price uplift on scarce stock", tag: "8 PM", body: "Where inventory tracks below expected sales, prices nudge up to recover category margin." },
+    { title: "Dynamic markdown", tag: "8 PM", body: "Excess and expiring stock marked down, with depth set by elasticity and deepened hourly until midnight." },
+  ]}
+/>
+
+## 6 PM: visibility before price
+
+At-risk SKUs move up in search and listing pages at 6 PM. There's no price change and no customer-facing markdown, so organic demand gets a two-hour window to absorb the excess at full margin.
+
+<Cards
+  items={[
+    { title: "What it does", body: "Promotes flagged SKUs to top positions in search and listing rankings." },
+    { title: "Why it matters", body: "Many perishables are thrown away only because they weren't visible enough. Boosting placement costs nothing and keeps full margin." },
+    { title: "Why markdown waits", body: "Markdown only fires at 8 PM, for whatever organic demand couldn't absorb in the boost window." },
+  ]}
+/>
+
+<Figure
+  src="/images/case-studies/markdown-engine/03.png"
+  width={1198}
+  height={1078}
+  alt="Standard ranking vs after impression boost: strawberries promoted to the top with a fresh-today tag"
+  caption="At-risk SKUs move up from 6 PM, with no price change and no markdown signal."
+/>
+
+<Callout label="Principle">Recover with visibility first. Markdown only fires if organic demand isn't enough.</Callout>
+
+## 8 PM: what to act on
+
+When the boost window closes, every SKU × store pair is checked against its live inventory signal. Stock tracking below expected sales gets a small price uplift. Stock in excess gets a markdown. Both run at the same time but aren't symmetric: the uplift stays conservative because a price rise can kill conversion, and the markdown goes deeper because clearing expiring stock comes first.
+
+<Figure
+  src="/images/case-studies/markdown-engine/05.png"
+  width={1332}
+  height={950}
+  alt="Decision flow: every SKU × store at 8 PM goes to the uplift path if below forecast, or the markdown path if above forecast"
+  caption="The decision flow"
+/>
+
+### How fresh produce is tracked without an expiry date
+
+Fresh produce has no expiry printed on the pack, so the system tracks each inbound batch by date. At 8 PM, only units from batches that hit their keep life today are flagged. Newer batches stay in normal stock.
+
+<Compare
+  beforeLabel="Example: 100 units in stock at 8 PM"
+  before={<>
+    <p><strong>50 units</strong> arrived this morning. Keep life intact, so they're excluded.</p>
+    <p><strong>50 units</strong> carried over from yesterday. Keep life ends tonight.</p>
+  </>}
+  afterLabel="Liquidation pool"
+  after={<p>Only the <strong>50 carried-over units</strong> enter the markdown pool.</p>}
+/>
+
+### How much to clear
+
+<Formula>Liquidation qty = Expiring stock − Expected natural sales</Formula>
+
+- **Expiring stock:** all units of a SKU × store whose last sellable day is today.
+- **Expected natural sales:** what the store is expected to sell at full price before close.
+- **Liquidation qty:** what's left, which the markdown has to move.
+
+### Three checks keep the demand heatmap honest
+
+<Cards
+  items={[
+    { tag: "Layer 01", title: "Elasticity-adjusted history", body: "Post-8 PM sales at markdown prices are normalised back to full-price demand before they enter the heatmap. Otherwise the model under-liquidates." },
+    { tag: "Layer 02", title: "Instock filter + ptype fallback", body: "Hours below 80% in-stock are excluded. Very low-velocity SKUs fall back to product-type level for the store." },
+    { tag: "Layer 03", title: "Impression weighting", body: "75% historical add-to-cart distribution, 25% in-app impression share by hour. Hot SKUs convert without a deep markdown." },
+  ]}
+/>
+
+<Figure
+  src="/images/case-studies/markdown-engine/07.png"
+  width={1872}
+  height={726}
+  alt="Intraday sales and intervention windows: natural sales 6 AM to 6 PM, impression boost 6 to 8 PM, markdown window 8 PM to 12 AM"
+  caption="Intraday sales and the two intervention windows (illustrative)"
+/>
+
+## 8 PM: recovering margin
+
+Where the eligibility engine finds underforecasted SKUs, a small price uplift goes on at those SKU × store pairs. It partly offsets the margin given up by markdowns on expiring stock, without the customer noticing.
+
+<Figure
+  src="/images/case-studies/markdown-engine/08.png"
+  width={2116}
+  height={498}
+  alt="Category PC1 net effect after 8 PM: markdown drag partly offset by uplift recovery"
+  caption="Category PC1, 8 PM onwards: markdown drag, offset by uplift recovery (illustrative)"
+/>
+
+<Cards
+  items={[
+    { tag: "Rule 01", title: "Uplift ceiling", body: "Never exceeds a defined percentage above the reference price." },
+    { tag: "Rule 02", title: "Signal-dependent", body: "Automatically reversed if sell-through slows." },
+    { tag: "Rule 03", title: "Approval required", body: "Category manager notified on strategic SKUs." },
+  ]}
+/>
+
+<Callout label="Rule 04: asymmetric by design">The uplift is conservative. The markdown goes deeper, because disposal is the bigger risk.</Callout>
+
+## Markdown depth, hour by hour
+
+A price elasticity model sets the depth needed to move the target quantity. The bigger the excess relative to expected sell-through, the deeper the markdown. It's recalculated every hour until midnight.
+
+<Figure
+  src="/images/case-studies/markdown-engine/10.png"
+  width={1940}
+  height={688}
+  alt="Markdown deepens hourly: initial markdown at 8 PM, stock rechecked each hour from 9 to 11 PM, residual disposed at 12 AM"
+  caption="Markdown depth is based on remaining excess. Not a blanket discount."
+/>
+
+## Guardrails
+
+Automation only earns trust when people can override it cleanly. Four guardrails wrap the whole pipeline, so category managers stay in control.
+
+<Steps
+  vertical
+  items={[
+    { title: "Margin floor", body: "Markdown never breaches a minimum margin without category manager approval." },
+    { title: "Instock buffer", body: "Liquidation qty = suggested qty minus one unit, which keeps the availability signal alive." },
+    { title: "PC1 monitoring", body: "If category margin is already compromised, an approval email is triggered automatically before proceeding." },
+    { title: "Disruption pause", body: "Festival spikes, campaigns or local ops issues pause the model for the affected stores automatically." },
+  ]}
+/>
+
+## A separate expected-sale model
+
+<Compare
+  beforeLabel="The risk"
+  before={<>
+    <p><strong>Reusing the ordering forecast for liquidation.</strong></p>
+    <p>An over-order would also underestimate the liquidation quantity. Both errors compound in the same direction, and waste builds up silently.</p>
+  </>}
+  afterLabel="What we built"
+  after={<>
+    <p><strong>An independent intraday expected-sale model.</strong></p>
+    <p>Seeded from live morning sales, not the ordering forecast. With independent error sources, an over-order can no longer quietly cause under-liquidation.</p>
+  </>}
+/>
+
+Only a partial share of liquidation units feeds back into forward demand forecasts, so the system never starts forecasting for markdown sales. As accuracy improves, that share is designed to shrink automatically.
+
+## Results
+
+Launched in early 2025 with fruits and vegetables, then expanded to bakery, dairy, milk, meat and seafood, ready-to-eat, deli and flowers. Around 70% of the disposal improvement is attributed to this system, alongside gains in forecasting accuracy.
+
+<Figure
+  src="/images/case-studies/markdown-engine/14.png"
+  width={2202}
+  height={912}
+  alt="Disposal reduction by category, Feb vs Sep 2025, and CPO trend vs target for UAE and KSA"
+  caption="Disposal down across categories; CPO on target in both markets. Exact figures withheld."
+/>
+
+## What I'd build next
+
+<Cards
+  items={[
+    { tag: "Next 01", title: "Supplier shelf-life accountability", body: "SKUs that keep entering liquidation are often a supplier problem, not a demand problem. Flag suppliers whose inbound shelf life falls short of what they declare, and feed it into category and procurement reviews." },
+    { tag: "Next 02", title: "Two-way pricing for non-perishables", body: "The same inventory-signal pricing works for overstocked non-perishables. Judge eligibility on days of cover instead of keep life, and take dynamic pricing beyond fresh." },
+    { tag: "Next 03", title: "Forecasting feedback loop", body: "A SKU that hits liquidation too often in 30 days should trigger a recalibration of its ordering model, not just a flag. Fix the over-ordering at the source." },
+  ]}
+/>

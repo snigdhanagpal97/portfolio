@@ -1,0 +1,227 @@
+export const meta = {
+  demo: {
+    type: "video",
+    src: "/images/case-studies/npr/demo.mp4",
+    portrait: true,
+    caption: "The recommendation rail in action",
+  },
+  facts: [
+    { label: "Role", value: "Sr. Data Analyst, product strategy" },
+    { label: "Timeline", value: "~6 weeks" },
+    { label: "Worked with", value: "Growth, Category, Merchandising, Supply Chain" },
+    { label: "Tools", value: "SQL, BI dashboards, PMI analysis, A/B testing" },
+  ],
+  metrics: [
+    { value: "16% → 25%", label: "rail impression to add-to-cart" },
+    { value: "₹8", label: "AOV uplift per order" },
+    { value: "+1.8", label: "items added in rail-driven baskets" },
+    { value: "5.8%", label: "less perishable disposal" },
+  ],
+  tldr: {
+    problem:
+      "The rail after add-to-cart ranked items by platform-wide popularity, so it mostly suggested more of what was already in the cart.",
+    did:
+      "Redesigned the scoring around cart affinity (PMI), persona clusters and subtype affinity, with a time-of-day boost for perishables and inventory guardrails.",
+    result:
+      "Impression to add-to-cart rose from 16% to 25%, AOV went up ₹8 per order, and perishable disposal fell 5.8%. Shipped to all stores.",
+  },
+  sections: [
+    "The problem",
+    "Why it was harder than it looked",
+    "The scoring system",
+    "Why PMI, not raw counts",
+    "Personas instead of individuals",
+    "Filters before serving",
+    "A tradeoff I had to defend",
+    "What the pilot taught us",
+    "Results",
+  ],
+  signoff: "Built at Blinkit · 2023",
+};
+
+## The problem
+
+Blinkit's Next Product Recommendation (NPR) rail is the strip of suggestions that appears after a customer adds something to cart. It already existed, but it ranked items by overall popularity, often from the same product type.
+
+<Compare
+  beforeLabel="Old logic: popularity ranked"
+  before={<>
+    <p>Add to cart: <strong>Bagels</strong></p>
+    <p>Rail shows: Milk, Bread, Croissant, Pita bread</p>
+    <p>Near-zero incremental add-to-cart.</p>
+  </>}
+  afterLabel="What the rail needed to do"
+  after={<>
+    <p>Suggest what this customer is most likely to add <strong>next</strong>, not more of what is already in the basket.</p>
+    <p>Do it with live store inventory and category priorities in mind.</p>
+  </>}
+/>
+
+<Callout tone="question" label="How might we">
+  Recommend the right next product? One that fits the cart, reflects personal history, and actually gets added.
+</Callout>
+
+## Why it was harder than it looked
+
+This was not just a ranking problem. The rail had to balance what felt like a natural next add, the right price point for an impulse buy, live inventory at the store, support for niche categories, and the business goal of reducing perishable disposal.
+
+<Cards
+  items={[
+    { title: "Right next add", body: "The rail had to show what a customer was actually likely to add next, not just something loosely related." },
+    { title: "Price matters", body: "Even relevant products would fail if they were too expensive for an impulse add." },
+    { title: "Thin user history", body: "Many customers did not have enough order history for strong personalisation." },
+    { title: "Live inventory", body: "A recommendation only worked if it was actually in stock at that store in that moment." },
+    { title: "Beyond obvious picks", body: "The logic could not only favour the highest-volume products. It also had to support smaller but valid category pairings." },
+    { title: "Business tradeoffs", body: "The rail had to improve add-to-cart behaviour while also supporting margin and reducing perishable disposals." },
+  ]}
+/>
+
+It wasn't a data problem. Blinkit had rich add-to-cart and order history. It was a logic problem: the rail used the wrong signal, item popularity instead of cart affinity. The fix needed three things:
+
+<Steps
+  items={[
+    { title: "Signal design", body: "Which data sources to use and how to weight them" },
+    { title: "Scoring logic", body: "How to combine signals into a single rankable score" },
+    { title: "Operational guardrails", body: "Inventory, time, and pricing filters before serving" },
+  ]}
+/>
+
+## The scoring system
+
+For each cart state, the system shortlisted candidates, scored them, then filtered and ranked them before serving.
+
+<Steps
+  items={[
+    { title: "Cart state", body: "Customer adds an item to cart" },
+    { title: "Score ~30 candidates", body: "PMI + persona + subtype affinity" },
+    { title: "Filter and rank", body: "Perishable boost, price check, inventory check" },
+    { title: "Top 15 tiles served", body: "Ranked, filtered, real time" },
+  ]}
+/>
+
+<Figure
+  src="/images/case-studies/npr/03.png"
+  width={1370}
+  height={688}
+  alt="Score weights: 50% cart affinity, 30% personalisation, 20% subtype affinity"
+/>
+
+<Formula>Final score = 0.5 × PMI basket + 0.3 × personalisation + 0.2 × subtype affinity</Formula>
+
+**Why these weights:**
+
+- **Cart context mattered most**, because the rail had to respond to what was already in the basket.
+- **Personalisation helped** when history was available.
+- **Subtype affinity was the fallback**, and supported broader category pairings.
+
+## Why PMI, not raw counts
+
+Every SKU was scored against every other SKU by how often they appeared in the same cart. Raw co-occurrence has a bias: items like milk and eggs are in so many carts that they top every list. PMI corrects for that.
+
+<Compare
+  beforeLabel="Raw counts: popular items dominate"
+  before={<>
+    <p>Cart: <strong>Nutella</strong></p>
+    <p>Top match: <strong>Milk</strong>. High volume, low relevance.</p>
+  </>}
+  afterLabel="PMI: normalise for popularity"
+  after={<>
+    <p>Cart: <strong>Nutella</strong></p>
+    <p>Top match: <strong>Strawberries</strong>. Lower volume, higher affinity.</p>
+  </>}
+/>
+
+<Formula>PMI(A, B) = log [ P(A, B) / (P(A) × P(B)) ]</Formula>
+
+<Figure
+  src="/images/case-studies/npr/04.png"
+  width={1146}
+  height={634}
+  alt="PMI score vs co-occurrence: hidden gems, true pairs, weak pairs, popular but weak"
+/>
+
+## Personas instead of individuals
+
+Individual history is thin in quick commerce. Most users order 2 to 4 times a month, so 90 days gives only 8 to 12 orders. Instead, users were clustered into behavioural personas, and each persona gave a dense, reliable signal. A user can belong to several personas, and recommendations combine all of them.
+
+<Figure
+  src="/images/case-studies/npr/05.png"
+  width={2100}
+  height={1300}
+  alt="Persona network: parent, self care shopper, fitness enthusiast, bougie buyer, devotional buyer, snackster, beverage lover, home chef"
+  wide
+/>
+
+<Callout label="Cold start">
+  New users get a persona after their first 2 to 3 orders. Until then, the 30% personalisation weight moves to subtype affinity (50% PMI, 50% subtype), so they still get strong cross-category picks instead of generic bestsellers.
+</Callout>
+
+## Filters before serving
+
+Scoring ranks the candidates. Filters decide what actually gets served, and they run in order.
+
+<Steps
+  vertical
+  items={[
+    { title: "Perishable boost", tag: "After 7 PM", body: "Perishables with high disposal risk get a score multiplier, which lifts them within the already-ranked list. Not a separate clearance experience." },
+    { title: "Price range filter", tag: "Impulse guard", body: "Candidates priced above 2× the customer's average order value are filtered out. Recommendations should feel like natural additions, not upsells that need a separate mental commitment." },
+    { title: "AOV sort", tag: "All day", body: "Within the filtered set, sort by descending price to maximise basket value." },
+    { title: "Inventory check", tag: "Hard filter", body: "Remove anything not in stock at the customer's dark store. Runs at serve time, not when scores are generated." },
+    { title: "Top 15 served", tag: "Output", body: "First 15 tiles, in order: ranked by score, time-adjusted, price-filtered, inventory-safe." },
+  ]}
+/>
+
+## A tradeoff I had to defend
+
+<Compare
+  beforeLabel="Leadership concern"
+  before={<p>Surfacing perishables after 7 PM might feel like the app is offloading unwanted products, which could hurt trust.</p>}
+  afterLabel="How I defended it"
+  after={<p>The boost was invisible to customers. Perishables ranked higher inside an already personalised list, not in a separate clearance experience. After launch: no drop in repeat order rate or rail engagement, and the disposal reduction held.</p>}
+/>
+
+## What the pilot taught us
+
+Before the national rollout, the algorithm was soft-launched to validate the scoring and catch edge cases.
+
+<Cards
+  items={[
+    {
+      tag: "Rail ATC rate",
+      title: "Cross-ptype logic validated",
+      body: "Users added recommended items at a measurably higher rate than the same-ptype control group.",
+    },
+    {
+      tag: "Data quality fix",
+      title: "City-level variation surfaced",
+      body: "Personalisation signals were too noisy for dark stores with under 200 daily orders, so they switched to city-level aggregation.",
+    },
+    {
+      tag: "Bounce rate",
+      title: "Inventory guardrail was critical",
+      body: "Removing out-of-stock recommendations reduced rail bounce rate and improved repeat rail engagement.",
+    },
+  ]}
+/>
+
+The same algorithm gives very different results depending on the cart, the user's history and the time of day:
+
+<Figure
+  src="/images/case-studies/npr/10.png"
+  width={1394}
+  height={558}
+  alt="Three carts, three outputs: daytime order, evening order after 7 PM, new user"
+  wide
+/>
+
+## Results
+
+The rail shipped to all stores. Conversion went up and perishable disposal went down, all without a separate customer-facing experience.
+
+<Figure
+  src="/images/case-studies/npr/11.png"
+  width={1410}
+  height={292}
+  alt="Rail conversion before vs after: 16% to 25%. Perishable disposal impact."
+  wide
+/>

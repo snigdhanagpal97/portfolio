@@ -1,0 +1,271 @@
+export const meta = {
+  demo: {
+    type: "image",
+    src: "/images/project-delisting.png",
+    width: 1248,
+    height: 946,
+    alt: "Store shelves with each SKU tagged keep, review or delist",
+    caption: "Every SKU in every store ends up as keep, review or delist",
+  },
+  facts: [
+    { label: "Role", value: "Product Manager" },
+    { label: "Timeline", value: "~8 weeks" },
+    { label: "Worked with", value: "Category, Merchandising, Supply Chain, Pricing, Store Ops" },
+    { label: "Tools", value: "SQL, BI dashboards, pricing inputs, sales and inventory data" },
+  ],
+  metrics: [
+    { value: "12,400+", label: "SKUs evaluated" },
+    { value: "90% → 11%", label: "stores above storage capacity" },
+    { value: "10%", label: "less perishable disposal loss" },
+    { value: "<1%", label: "conversion drop, add-to-cart to checkout" },
+  ],
+  tldr: {
+    problem:
+      "A growing long tail of weak SKUs was eating shelf space in dark stores, but low sales alone couldn't tell us whether a SKU was truly weak or just held back.",
+    did:
+      "Defined an explainable 9-step funnel that separates weak demand from suppressed demand, with guardrails and a disposal override, and recommends an action for every SKU.",
+    result:
+      "12,400+ SKUs evaluated, stores above storage capacity down from 90% to 11%, and 10% less perishable disposal loss, with under 1% drop in conversion.",
+  },
+  sections: [
+    "The ask",
+    "Low sales is not the same as weak",
+    "Principles",
+    "The signals",
+    "The 9-step funnel",
+    "Disposal override",
+    "Guardrails",
+    "Three outcomes",
+    "What it found",
+    "How it ran",
+    "What I'd build next",
+  ],
+  signoff: "Built at Noon · 2025",
+};
+
+## The ask
+
+As dark store assortments grew, a long tail of low performers started taking up limited shelf space, adding replenishment and picking work, and in some cases driving disposal losses. The business needed a scalable way to decide which SKUs stay, which need help, and which can go.
+
+<Steps
+  items={[
+    { title: "Assortment grows", body: "More SKUs added every month" },
+    { title: "Long tail expands", body: "Low-velocity SKUs pile up" },
+    { title: "Waste increases", body: "Disposal and inventory costs" },
+  ]}
+/>
+
+<Callout tone="question" label="How might we">
+  Reduce assortment inefficiency in dark stores without accidentally delisting SKUs that are new, under-discovered, or strategically important?
+</Callout>
+
+## Low sales is not the same as weak
+
+Removing low sellers looks easy from the outside, but it's easy to remove the wrong SKU. A SKU can sell little for reasons that have nothing to do with demand:
+
+<Cards
+  items={[
+    { title: "New launch", body: "Not enough data to judge yet." },
+    { title: "Low availability", body: "Supply held demand back." },
+    { title: "Low discoverability", body: "Customers couldn't find it." },
+    { title: "Poor pricing", body: "Priced above competitors." },
+    { title: "Niche subtype", body: "Needed to keep the category complete." },
+    { title: "Repeat-led demand", body: "Small but loyal audience." },
+  ]}
+/>
+
+The real question was whether low performance was **structural or fixable**. Short shelf life adds a third case: SKUs whose disposal risk outweighs what they sell.
+
+### Goal and non-goals
+
+<Compare
+  beforeLabel="Goal"
+  before={<p>An explainable framework that finds structurally weak SKUs, protects healthy ones early, doesn't penalise suppressed demand, and recommends the right action instead of a binary keep-or-remove.</p>}
+  afterLabel="Non-goals"
+  after={<>
+    <p>Not a black-box ML score.</p>
+    <p>Not a replacement for category judgement on special cases.</p>
+    <p>Not a full assortment redesign or optimisation engine in V1.</p>
+  </>}
+/>
+
+## Principles
+
+I designed it as an explainable funnel rather than one composite score, which made it easier to reason about, validate, and trust.
+
+<Steps
+  vertical
+  items={[
+    { title: "Protect clearly healthy SKUs early", body: "If a SKU contributes meaningfully to sales or units, it exits the funnel immediately." },
+    { title: "Distinguish weak from suppressed demand", body: "Before concluding demand is low, check whether availability, discoverability or pricing is holding it back." },
+    { title: "Explainability over black-box scoring", body: "Every recommendation traces back to a specific, auditable reason." },
+    { title: "Recommend actions, not just labels", body: "Output 'increase availability' or 'reduce price', not just 'watchlist'. Actionable outputs drive adoption." },
+    { title: "Preserve subtype and assortment integrity", body: "Never delist every SKU in a subtype. Keep at least one so the category has no gaps." },
+  ]}
+/>
+
+## The signals
+
+The key design decision was keeping **suppression signals** separate from **demand signals**. A SKU with low sales and poor availability isn't weak, it's constrained. For example, availability below 60% counted as suppression, not performance.
+
+<Cards
+  items={[
+    { tag: "Demand", title: "How much it sells", body: "GMV contribution, units contribution, dark store penetration, subtype penetration." },
+    { tag: "Suppression", title: "What holds it back", body: "New SKU check, availability (% days in stock), discoverability (impressions, conversion, visibility)." },
+    { tag: "Commercial", title: "Price and loyalty", body: "Price competitiveness vs the lowest competitor price, and repeat purchase index (repeat buyers / unique buyers, 90 days)." },
+  ]}
+/>
+
+<Callout label="Operational risk">Disposal risk (disposal loss vs absolute margin) and forecast instability (demand variability and shelf life).</Callout>
+
+## The 9-step funnel
+
+Every SKU enters at the top and is checked in order. At each step it either exits with a clear recommendation or moves on. Only SKUs that fail all nine checks are recommended for delisting.
+
+### Phase 1: remove clear winners
+
+<Steps
+  vertical
+  items={[
+    { title: "Sales contribution", tag: "Active if top 80% GMV" },
+    { title: "Units sold", tag: "Active if top 80% units" },
+  ]}
+/>
+
+### Phase 2: check for fixable constraints
+
+<Steps
+  vertical
+  items={[
+    { title: "Dark store penetration", tag: "Active if high store spread" },
+    { title: "New SKU check", tag: "Watchlist if recently launched" },
+    { title: "Availability", tag: "Watchlist if below 60%" },
+    { title: "Discoverability", tag: "Watchlist if low impressions, high conversion" },
+  ]}
+/>
+
+### Phase 3: evaluate structural strength
+
+<Steps
+  vertical
+  items={[
+    { title: "Subtype penetration", tag: "Active if high subtype share" },
+    { title: "Pricing (price competitiveness score)", tag: "Watchlist if overpriced vs market" },
+    { title: "Repeat purchase", tag: "Watchlist if high repeat index" },
+  ]}
+/>
+
+## Disposal override
+
+Perishable and short shelf-life SKUs needed separate treatment. Some weren't just weak, they actively lost money because expected sell-through didn't justify the disposal risk. A SKU can convert decently and still lose money if its shelf life doesn't match how fast it sells.
+
+<Figure
+  src="/images/case-studies/delisting/11.png"
+  width={598}
+  height={414}
+  alt="Decision tree: is time between sales longer than keep life? Then is disposal loss greater than margin? Leads to delist or watchlist."
+  caption="The disposal override"
+/>
+
+## Guardrails
+
+<Cards
+  items={[
+    { title: "New launch protection", body: "Recently launched SKUs are excluded until there's enough data to judge them." },
+    { title: "Availability distortion", body: "SKUs with under 50 to 80% availability go to the watchlist, since low sales may be supply-driven." },
+    { title: "Subtype wipeout prevention", body: "If every SKU in a subtype is flagged, the best seller stays as a fallback." },
+    { title: "Premium niche protection", body: "Low volume doesn't mean low value. High-margin niche SKUs go to manual review." },
+    { title: "Loyalty-driven SKUs", body: "SKUs with a high repeat purchase index stay even at low volume, because they serve loyal customers." },
+    { title: "Price correction path", body: "Overpriced SKUs go to price correction instead of delisting. The problem is commercial, not structural." },
+  ]}
+/>
+
+## Three outcomes
+
+<Cards
+  items={[
+    { tag: "Active", title: "Structurally healthy", body: "Keep in the assortment." },
+    { tag: "Watchlist", title: "Could recover with help", body: "Fix the underlying issue: new SKU, availability, discoverability, price, forecasting, repeat buyers, or subtype protection." },
+    { tag: "Delist", title: "Still weak after every check", body: "Remove from the assortment." },
+  ]}
+/>
+
+In most watchlist cases, one fixable constraint was the difference between recovery and removal. Three example walkthroughs (SKU names are illustrative; signals and outcomes are from real framework outputs):
+
+<Figure
+  src="/images/case-studies/delisting/16.png"
+  width={948}
+  height={988}
+  alt="SKU A, organic oat milk: low on every check, delisted as structurally weak"
+/>
+
+<Figure
+  src="/images/case-studies/delisting/17.png"
+  width={950}
+  height={990}
+  alt="SKU B, premium Greek yogurt: very low impressions but high conversion, exits at step 6 to the watchlist to increase discoverability"
+/>
+
+<Figure
+  src="/images/case-studies/delisting/18.png"
+  width={944}
+  height={978}
+  alt="SKU C, almond butter: 41% availability, exits at step 4 to the watchlist to increase availability"
+/>
+
+## What it found
+
+<Steps
+  items={[
+    { title: "12,400+", body: "SKUs evaluated" },
+    { title: "62%", body: "recommended active" },
+    { title: "23%", body: "moved to watchlist" },
+    { title: "15%", body: "recommended delist" },
+  ]}
+/>
+
+Freed shelf space went to new SKU trials, and some of them became high performers within the review period.
+
+<Figure
+  src="/images/case-studies/delisting/19.png"
+  width={776}
+  height={472}
+  alt="Assortment composition before and after the framework: more high performers and new winners, fewer delist candidates"
+  caption="Assortment mix before and after (illustrative proportions)"
+/>
+
+<Figure
+  src="/images/case-studies/delisting/20.png"
+  width={1212}
+  height={694}
+  alt="Current vs recommended assortment size by category: staples, dairy, snacks, beverages, personal care"
+  caption="Current vs recommended assortment size by category (illustrative, not actual figures)"
+/>
+
+## How it ran
+
+The framework ran monthly on the 28th. Each category manager got an email with their category's watchlist and delist recommendations, and the reasoning behind each flag.
+
+<Steps
+  vertical
+  items={[
+    { title: "Historical backtesting", body: "Run against the past 90 days and compare with actual delist outcomes." },
+    { title: "False positive analysis", body: "Audit delist recommendations with high cart inclusion or high margin." },
+    { title: "Monthly category emailer", body: "Flagged SKUs and reasoning sent to category managers each cycle." },
+    { title: "30/60/90-day monitoring", body: "Track disposal rate, availability and space utilisation after delisting." },
+    { title: "Space reallocation simulation", body: "Model the impact of freed space on category revenue." },
+    { title: "Auto-delist on the 5th", body: "SKUs with no category manager action or comment by the 5th were delisted automatically." },
+  ]}
+/>
+
+## What I'd build next
+
+V1 was kept explainable and rule-based on purpose, so category managers could trust it and override it. Later versions move from flagging weak SKUs to optimising what replaces them.
+
+<Cards
+  items={[
+    { tag: "V1 · Current", title: "Explainable funnel", body: "Rules-based, 9-step sequential evaluation, with disposal override logic." },
+    { tag: "V2 · Near term", title: "Sharper economics", body: "Profitability per cubic volume, cart breaker score, customer returns analysis, better price sensitivity logic." },
+    { tag: "V3 · Future", title: "Optimised assortment", body: "Optimisation-based planning, storage-type-aware decisions, and allocation constrained by demand, margin and volume." },
+  ]}
+/>

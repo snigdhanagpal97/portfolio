@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion, type Variants } from "framer-motion";
 import { HeroIllustration } from "@/components/HeroIllustration";
+import { RESUME } from "@/content/site";
 
 const container: Variants = {
   hidden: {},
@@ -85,9 +86,8 @@ export function Hero() {
               </span>
             </Link>
             <a
-              href="/resume.pdf"
-              target="_blank"
-              rel="noopener"
+              href={RESUME.href}
+              download={RESUME.filename}
               className="group transition-colors hover:text-purple-600"
             >
               View Resume{" "}

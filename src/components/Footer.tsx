@@ -1,6 +1,8 @@
+import { RESUME } from "@/content/site";
+
 const LINKS = [
   { label: "Email", href: "mailto:snagpal1997@gmail.com" },
-  { label: "Resume", href: "/resume.pdf", external: true },
+  { label: "Resume", href: RESUME.href, download: RESUME.filename },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/snigdhan97/", external: true },
 ];
 
@@ -21,6 +23,7 @@ export function Footer() {
               <a
                 href={l.href}
                 {...(l.external && { target: "_blank", rel: "noopener" })}
+                {...(l.download && { download: l.download })}
                 className="group transition-colors hover:text-purple-600"
               >
                 {l.label}{" "}

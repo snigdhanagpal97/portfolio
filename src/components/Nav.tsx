@@ -3,11 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { RESUME } from "@/content/site";
 
 const links = [
   { href: "/work", label: "Work" },
   { href: "/about", label: "About" },
-  { href: "/resume.pdf", label: "Resume", external: true },
 ];
 
 export function Nav() {
@@ -40,13 +40,12 @@ export function Nav() {
         </Link>
 
         <ul className="flex items-center gap-4 text-[15px] text-ink-70 sm:gap-8 sm:text-base">
-          {links.map(({ href, label, external }) => {
+          {links.map(({ href, label }) => {
             const active = pathname.startsWith(href);
             return (
               <li key={href}>
                 <Link
                   href={href}
-                  {...(external && { target: "_blank", rel: "noopener" })}
                   aria-current={active ? "page" : undefined}
                   className={`relative py-1 transition-colors hover:text-purple-600 after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:origin-left after:rounded-full after:bg-purple-600 after:transition-transform after:duration-300 ${
                     active
@@ -59,6 +58,15 @@ export function Nav() {
               </li>
             );
           })}
+          <li>
+            <a
+              href={RESUME.href}
+              download={RESUME.filename}
+              className="relative py-1 transition-colors hover:text-purple-600"
+            >
+              Resume
+            </a>
+          </li>
           <li>
             <a
               href="#contact"

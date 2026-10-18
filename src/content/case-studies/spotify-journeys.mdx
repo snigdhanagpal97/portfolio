@@ -1,0 +1,202 @@
+export const meta = {
+  demo: {
+    type: "video",
+    src: "/images/case-studies/spotify-journeys/demo.mp4",
+    portrait: true,
+    caption: "Prototype walkthrough",
+    link: { href: "https://preview--audio-habit-builder.lovable.app/", label: "Try the live prototype" },
+  },
+  facts: [
+    { label: "Role", value: "Product Manager (self-directed)" },
+    { label: "Timeline", value: "~3 weeks" },
+    { label: "Context", value: "NextLeap AI PM Fellowship case study" },
+    { label: "Tools", value: "Lovable, Airtable, Zapier, GPT" },
+  ],
+  metrics: [
+    { value: "60%", label: "target: set a goal in week one" },
+    { value: "40%", label: "target: finish a full track" },
+    { value: "25–30%", label: "target: come back on day 7" },
+    { value: "40%", label: "target: say \"I'm learning\"" },
+  ],
+  tldr: {
+    problem:
+      "Millions of 18 to 30 year olds already learn through audio on Spotify, but nothing gives that listening structure or progress, so learning intent leaks to YouTube and Duolingo.",
+    did:
+      "Framed the problem, cut scope to one testable loop, and built a zero-engineering MVP of Goal-Based Audio Journeys in 3 weeks with AI and no-code tools.",
+    result:
+      "A working prototype and a metric tree for a 1,000-user pilot. The numbers above are projected pilot targets, not shipped results.",
+  },
+  sections: [
+    "The brief",
+    "Wide reach, shallow engagement",
+    "Who we're solving for",
+    "Closing the loop",
+    "Why now, and why it wins",
+    "What went in, and what I cut",
+    "The daily loop",
+    "Measuring learning, not listening",
+    "What I'd build next",
+  ],
+  signoff: "NextLeap AI PM Fellowship case study · 2026",
+};
+
+## The brief
+
+Spotify India's leadership wanted to test whether audio could become a personal-growth tool, not just entertainment.
+
+<Steps
+  items={[
+    { title: "Ship an MVP", body: "A skill-building feature, in 3 weeks" },
+    { title: "No India dev bandwidth", body: "A PM, a designer and an analyst, using AI builders and no-code tools" },
+    { title: "Pilot to 1,000 users", body: "Students and early-career users" },
+  ]}
+/>
+
+<Callout tone="question" label="The bet">
+  If Spotify can help people learn with audio, not just listen, it has an edge competitors don't.
+</Callout>
+
+## Wide reach, shallow engagement
+
+Every day, over 100 million Indians open Spotify and stream for hours. But the experience is passive. Nothing turns that listening into something that feels like progress, and nothing makes leaving cost anything.
+
+On price and catalogue alone, Spotify is one tap away from JioSaavn, Gaana or Wynk. Retention looks healthy. It isn't defensible.
+
+- No structure on what people already stream
+- No sense of progress; sessions blur together
+- Switching cost to a rival is near zero
+- Learning intent leaks to YouTube and Duolingo
+- Retention is high but undifferentiated
+
+## Who we're solving for
+
+18 to 30 year olds who already use audio to learn, like streaming English music for vocabulary, then leave for YouTube and Duolingo the moment they want structure.
+
+<Callout label="What we heard">"Music motivates me, but I want it tied to goals."</Callout>
+
+<Figure
+  src="/images/case-studies/spotify-journeys/02.png"
+  width={2202}
+  height={970}
+  alt="Two users: Aarav, 22, wants to sound natural in English but dropped Duolingo in a week; Riya, 26, wants her focus playlists to count toward speaking up in meetings"
+/>
+
+## Closing the loop
+
+<Figure
+  src="/images/case-studies/spotify-journeys/03.png"
+  width={2346}
+  height={1154}
+  alt="Today: opens Spotify, plays a playlist, listens passively, closes the app, leaves for YouTube"
+  caption="Today: listening goes nowhere"
+/>
+
+<Figure
+  src="/images/case-studies/spotify-journeys/04.png"
+  width={2350}
+  height={1156}
+  alt="With Journeys: opens on day 4, plays the track, marks it complete, streak grows, nudge tomorrow"
+  caption="With Journeys: the loop closes"
+/>
+
+The whole design goal: close the loop before the user leaves for YouTube or Duolingo.
+
+## Why now, and why it wins
+
+<Cards
+  items={[
+    { title: "Behaviour proven", body: "Audio-first learning already has mainstream adoption." },
+    { title: "Platform ready", body: "Spotify already owns daily audio consumption." },
+    { title: "Window closing", body: "Learning intent is moving to competing platforms." },
+  ]}
+/>
+
+<Compare
+  beforeLabel="For users"
+  before={<>
+    <p>Build consistent 10 to 15 minute learning habits.</p>
+    <p>Learn without leaving an app they already use daily.</p>
+    <p>Feel progress through streaks and structured goals.</p>
+  </>}
+  afterLabel="For the business"
+  after={<>
+    <p>Differentiate beyond catalogue and price.</p>
+    <p>Lift retention through accumulated progress.</p>
+    <p>Build an intent graph for future personalisation, advertising and premium learning.</p>
+  </>}
+/>
+
+<Figure
+  src="/images/case-studies/spotify-journeys/05.png"
+  width={1150}
+  height={1160}
+  alt="Compounding flywheel: structured content, daily listening habit, higher switching cost, defensible retention, richer intent data"
+  caption="High retention isn't the same as defensible retention. Journeys make leaving feel like abandoning progress."
+/>
+
+## What went in, and what I cut
+
+With 3 weeks and no engineering, I scored every feature on value versus effort and kept one rule: ship only what tests the core hypothesis, that a structured audio track feels like skill-building and users notice their progress.
+
+<Figure
+  src="/images/case-studies/spotify-journeys/06.png"
+  width={1820}
+  height={1156}
+  alt="Value vs effort matrix: ship goal selection, structured track, progress tracker, light nudges; defer AI-personalised paths, quizzes, creator marketplace, certificates"
+/>
+
+<Compare
+  beforeLabel="Deferred"
+  before={<>
+    <p><strong>Quizzes:</strong> proxy learning with a survey first.</p>
+    <p><strong>Certificates and badges:</strong> retention amplifier, premature.</p>
+    <p><strong>AI-personalised paths:</strong> with 3 goals and 3 weeks, curation beats a model.</p>
+    <p><strong>Creator marketplace:</strong> a separate monetisation product.</p>
+  </>}
+  afterLabel="Ships"
+  after={<>
+    <p><strong>Structured daily track:</strong> 4 songs, 1 podcast clip and a daily focus line.</p>
+    <p><strong>Goal selection:</strong> 3 goals, with English vocabulary as the hero.</p>
+    <p><strong>Progress tracker:</strong> streak and completion %.</p>
+    <p><strong>Light nudges.</strong></p>
+  </>}
+/>
+
+## The daily loop
+
+Four screens carry the loop: goal picker, daily track, mark complete, progress.
+
+<Gallery
+  images={[
+    { src: "/images/case-studies/spotify-journeys/07.png", width: 620, height: 1294, alt: "Spotify home with a Your Journeys card: keep your streak alive" },
+    { src: "/images/case-studies/spotify-journeys/08.png", width: 630, height: 1370, alt: "Journey playlist: Learn better English, today's focus, songs with words to know, mark day complete" },
+  ]}
+/>
+
+[Open the live prototype ↗](https://preview--audio-habit-builder.lovable.app/)
+
+## Measuring learning, not listening
+
+The trap: minutes streamed is the entertainment metric this feature is trying to move past, so it can't be the success measure. The metric tree is deliberately narrow, and every target is a projection for the 1,000-user pilot.
+
+<Steps
+  vertical
+  items={[
+    { title: "North star", body: "Weekly structured-track completions per active user." },
+    { title: "Activation", tag: "Target 60%", body: "% who set a goal." },
+    { title: "Core loop", tag: "Target 40%", body: "% completing a full track." },
+    { title: "Habit", body: "% reaching a 7-day streak." },
+    { title: "Retention", tag: "Target 25–30%", body: "Day-7 return to the journey, not just an app open." },
+    { title: "Perceived learning", tag: "Target 40% yes", body: "In-app survey \"do you feel you're learning?\" plus willingness to pay." },
+    { title: "Counter metric", body: "Does core listening time drop, or do users get confused?" },
+  ]}
+/>
+
+<Callout>The switching-cost edge holds only if the habit and perceived-learning numbers hold.</Callout>
+
+## What I'd build next
+
+- **Quizzes**, to validate learning beyond self-report.
+- **Real personalisation**, once there's completion data to train on.
+- **Badges**, to reinforce streaks and social proof.
+- **Then the creator marketplace**, the supply-side bet.

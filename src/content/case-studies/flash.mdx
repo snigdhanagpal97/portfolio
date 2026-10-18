@@ -1,0 +1,205 @@
+export const meta = {
+  demo: {
+    type: "video",
+    src: "/images/case-studies/flash/demo.mp4",
+    portrait: true,
+    caption: "Flash in the live prototype",
+    link: { href: "https://blinkit-flash-bbu2-ejh67s0c5-snagpal1997-8717s-projects.vercel.app/", label: "Try the live prototype" },
+  },
+  facts: [
+    { label: "Role", value: "Product Manager, built end to end" },
+    { label: "Context", value: "NextLeap AI PM Fellowship (Top Fellow) capstone on Blinkit" },
+    { label: "Research", value: "3,776 customer reviews + 6 user interviews" },
+    { label: "Built with", value: "Claude API, Next.js, Supabase, Vercel" },
+  ],
+  metrics: [
+    { value: "3,776", label: "customer reviews mined" },
+    { value: "92%", label: "classifier agreement with human labels (κ = 0.89)" },
+    { value: "6", label: "user interviews across 4 cities" },
+    { value: "1", label: "clarifying question, at most" },
+  ],
+  tldr: {
+    problem:
+      "Blinkit owns the urgent, low-effort grocery trip, but customers don't think of it the moment a purchase needs reviews, comparison or return assurance.",
+    did:
+      "Mined 3,776 customer reviews with an AI classification pipeline, ran 6 interviews, wrote the PRD and KPI framework, and shipped a live prototype of Flash.",
+    result:
+      "Found that consideration, not awareness, is the real bottleneck, and built a situation-first assistant that turns one line into a ready basket.",
+  },
+  sections: [
+    "The tension",
+    "Evidence, not assumptions",
+    "What the reviews showed",
+    "What interviews changed",
+    "The problem",
+    "Three options",
+    "The experience",
+    "How Flash works",
+    "Measuring success",
+    "Roadmap",
+  ],
+  signoff: "NextLeap AI PM Fellowship (Top Fellow) capstone",
+};
+
+## The tension
+
+Blinkit has won the replenishment habit, and that same habit may limit category expansion. The better it gets at helping people **retrieve** what they already need, the less reason they have to **explore**.
+
+<Compare
+  beforeLabel="Familiar purchase: low effort"
+  before={<p>Know the need → search → add → checkout. Fast, habitual, solved.</p>}
+  afterLabel="New category: high effort"
+  after={<p>Recognise → explore → evaluate → build confidence → purchase.</p>}
+/>
+
+<Callout tone="question" label="Business objective">
+  Increase the % of monthly active customers who buy from at least one new category every month.
+</Callout>
+
+The target segment: **high-frequency customers with narrow baskets**. They already trust the platform and order often, but their purchases stay in familiar aisles.
+
+## Evidence, not assumptions
+
+Instead of guessing where category expansion breaks, I combined public customer conversations, AI-assisted retrieval, structured behavioural tagging and human synthesis.
+
+<Steps
+  items={[
+    { title: "Collect", body: "~3,776 public conversations: Play Store, App Store, YouTube, competitor reviews" },
+    { title: "Retrieve", body: "Custom engine finds discovery and consideration talk: 711 candidates" },
+    { title: "Classify", body: "AI tags stage, barrier, JTBD, category and confidence: 38 signals" },
+    { title: "Synthesise", body: "Human review of high-confidence signals: 3 opportunity areas" },
+  ]}
+/>
+
+The classifier agreed with 50 human labels 92% of the time (Cohen's κ = 0.89). The schema allows "unknown" when evidence is thin. Code is on [GitHub ↗](https://github.com/snigdhanagpal97/blinkit-category-discovery-engine).
+
+## What the reviews showed
+
+Only ~1.2% of conversations touch category discovery, but that thin signal is strikingly consistent. It lines up with three barriers: **know** ("I didn't know they sold this"), **consider** ("I know, but it's not where I'd buy it") and **confidence** ("I can see it, but I can't choose confidently").
+
+<Figure
+  src="/images/case-studies/flash/barriers.png"
+  width={1431}
+  height={500}
+  alt="Barrier mix across 38 discovery conversations: awareness 53%, assortment 21%, trust and confidence 17%, other 9%"
+/>
+
+<Figure
+  src="/images/case-studies/flash/trust.png"
+  width={1355}
+  height={497}
+  alt="Trust complaints as a share of substantive reviews: Zepto 16.7%, Blinkit 13.9%, BigBasket 12.6%"
+  caption="The platform pushing hardest into new categories carries the most trust complaints. Blinkit's edge: expand on trust it has already earned."
+/>
+
+Public data can see two of the three barriers. **Consider** barely shows up, because nobody reviews a platform they never thought of. That made it the priority question for interviews.
+
+## What interviews changed
+
+Six in-depth interviews with high-frequency, narrow-basket customers in Bengaluru, Mumbai, Hyderabad and Delhi (~35 minutes each).
+
+<Cards
+  items={[
+    { tag: "5 of 6", title: "Went elsewhere", body: "For their last non-grocery need, and 3 of them already knew Blinkit carried it." },
+    { tag: "4 of 6", title: "Underestimated the range", body: "Named fewer than half the non-grocery categories Blinkit sells." },
+    { tag: "4 of 6", title: "Needed confidence", body: "Wanted reviews, comparisons or return assurance before trying beauty or electronics." },
+  ]}
+/>
+
+<Figure
+  src="/images/case-studies/flash/interviews.png"
+  width={1649}
+  height={1073}
+  alt="Hypotheses vs interview evidence: awareness and decision support validated; rarely considered for higher-consideration purchases challenged and promoted; assortment gaps partial"
+/>
+
+<Callout label="What changed">Secondary research ranked awareness first. Interviews showed the real constraint is consideration: when a purchase takes thought, people instinctively open Amazon or Flipkart.</Callout>
+
+## The problem
+
+High-frequency Blinkit customers order 4+ times a week, but their baskets stay in one or two categories. The moment a purchase needs reviews, comparison or return assurance, Blinkit isn't in the consideration set. It owns the urgent, low-decision trip, but it isn't yet the platform customers consider when a purchase takes thought.
+
+## Three options
+
+<Callout tone="question" label="How might we">
+  Make Blinkit the platform customers consider for higher-consideration needs, without asking them to browse, compare or think in categories?
+</Callout>
+
+<Cards
+  items={[
+    { tag: "Option 1", title: "Awareness campaigns", body: "Push category ads. Solves know, but not consider: 3 of 6 already knew and still opened Amazon." },
+    { tag: "Option 2", title: "Discovery rails", body: "Top picks and an AI next-product rail. Only reaches people already in the app, before consideration." },
+    { tag: "Option 3 · Recommended", title: "Flash", body: "A situation-first AI layer. Describe the moment in one line and get a ready basket. Solves know, consider and confidence, with the highest build effort." },
+  ]}
+/>
+
+Nobody shops for a category; they shop for a situation. For products, Amazon is the default. For situations, there's no default yet, and that's the consideration set Blinkit can own.
+
+## The experience
+
+<Figure
+  src="/images/case-studies/flash/screens.png"
+  width={2826}
+  height={1135}
+  alt="Flash prototype screens: home and search entry points, the one-question conversation, a ready collection, and checkout"
+  caption="Entry points, conversation, checkout"
+/>
+
+<Figure
+  src="/images/case-studies/flash/journey.png"
+  width={2815}
+  height={420}
+  alt="User journey: need arises, open Blinkit, describe the situation, Flash asks one question, ready collection, checkout delivered in 10 minutes"
+/>
+
+- **No searching.** Describe a situation instead of hunting for products one by one.
+- **No decision fatigue.** At most one clarifying question, then a complete basket.
+- **No forgotten items.** Flash remembers what the situation needs.
+
+Flash understands Hinglish too: "bacche ko bukhar hai", "my kid is burning up" and "fever 102 what do I do" all lead to the same fever kit. A child's fever leads to pharmacy, a new puppy to pet care, an exam tomorrow to stationery. **The customer never picks a new category. The category comes with the solution.**
+
+## How Flash works
+
+<Figure
+  src="/images/case-studies/flash/system.png"
+  width={2836}
+  height={209}
+  alt="System flow: capture, resolve, ground, assemble, render"
+/>
+
+<Cards
+  items={[
+    { title: "Grounded, not guessed", body: "Only real, in-stock SKUs. Responses follow a strict schema, so free text can't break the UI." },
+    { title: "Confidence-aware", body: "60%+ match builds the basket directly, 30 to 60% asks one question, under 30% shows suggestions." },
+    { title: "Safe by design", body: "Prompt-injection safe, medical caution, no upsell, no sensitive inference, and the customer always starts the conversation." },
+  ]}
+/>
+
+Cold start is easy: the grocery basket is already the signal. Shaving gel suggests razors, a thermometer suggests a fever kit. Built with Next.js, Supabase and the Claude API, deployed on Vercel.
+
+## Measuring success
+
+<Callout label="North star">Meaningful Category Expansion Rate (MCER): % of monthly active customers who buy from at least one new non-grocery category through Flash and buy from it again within 30 days.</Callout>
+
+<Steps
+  vertical
+  items={[
+    { title: "Conversation success", tag: "Pilot target ≥70%", body: "Users get a relevant basket with 0 to 1 clarifications." },
+    { title: "New-category buyers", tag: "Target +20%", body: "vs a control group of non-Flash users." },
+    { title: "AOV", tag: "Target +₹125", body: "Incremental value per order." },
+    { title: "Repeat Flash use", tag: "Target >30%", body: "Users come back to Flash." },
+    { title: "AI quality", tag: "Targets", body: "Intent accuracy ≥90%, grounding ≥95%, 0% hallucinated SKUs, under 3 seconds." },
+  ]}
+/>
+
+All targets are projections for a pilot, not shipped results.
+
+## Roadmap
+
+<Cards
+  items={[
+    { tag: "0 to 3 months", title: "Pilot", body: "10 high-intent situations, 5% of users in one city. Validate impact and unit economics." },
+    { tag: "4 to 9 months", title: "Expansion", body: "50+ situations, voice input, 25% of users across more cities." },
+    { tag: "10 to 12+ months", title: "Platform", body: "Flash becomes the default discovery layer, with personalisation and cross-category intelligence." },
+  ]}
+/>

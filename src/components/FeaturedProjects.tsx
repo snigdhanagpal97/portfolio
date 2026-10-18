@@ -5,59 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion, type PanInfo } from "framer-motion";
 import { Reveal } from "@/components/Reveal";
-
-// Titles, subtitles and tags from the current site; headline numbers from the
-// resume only (see reference/plan.md).
-const PROJECTS = [
-  {
-    slug: "markdown-engine",
-    title: "Automated Fresh Pricing & Markdown Engine",
-    subtitle: "Reducing waste while protecting sell-through and margin recovery",
-    context: "Noon · 2025",
-    metric: { value: "$13K/day", label: "write-offs eliminated" },
-    tags: ["Pricing & Monetization", "Platform & Operations"],
-  },
-  {
-    slug: "flash",
-    title: "Blinkit Flash: AI Shopping Assistant",
-    subtitle: "A situation-first AI layer that turns a one-line need into a ready basket",
-    context: "NextLeap AI PM Fellowship (Top Fellow) capstone",
-    metric: { value: "3,776", label: "customer reviews mined" },
-    tags: ["Product Strategy", "0 → 1 Building"],
-  },
-  {
-    slug: "npr",
-    title: "NPR Engine for AOV Growth & Waste Reduction",
-    subtitle: "Using recommendation logic to grow baskets without creating excess inventory",
-    context: "Blinkit · 2023",
-    metric: { value: "16% → 25%", label: "impression to add-to-cart" },
-    tags: ["Pricing & Monetization", "Growth & Activation"],
-  },
-  {
-    slug: "spotify-journeys",
-    title: "Spotify Journeys: From Streaming to Skill-Building",
-    subtitle: "Turning passive listening into a daily learning habit",
-    context: "NextLeap AI PM Fellowship case study",
-    metric: null,
-    tags: ["Product Strategy", "AI & No-Code MVP"],
-  },
-  {
-    slug: "delisting",
-    title: "Assortment Rationalisation Framework for Dark Stores",
-    subtitle: "Balancing efficiency, profitability, and customer choice",
-    context: "Noon · 2025",
-    metric: null,
-    tags: ["Analytics & Experimentation", "Platform & Operations"],
-  },
-  {
-    slug: "freshflow",
-    title: "FreshFlow Control Tower",
-    subtitle: "Unifying forecasting, ordering, allocation, and delivery tracking in one place",
-    context: "Noon",
-    metric: { value: "10%", label: "of daily orders left for manual review" },
-    tags: ["Platform & Operations", "0 → 1 Building"],
-  },
-];
+import { FEATURED as PROJECTS } from "@/content/projects";
 
 const DURATION = 5000; // ms each project stays in front
 const TICK = 50;
