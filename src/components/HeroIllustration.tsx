@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { WindowSky } from "@/components/WindowSky";
+import { SKY_POSTER, WindowSky } from "@/components/WindowSky";
 
 export function HeroIllustration() {
   const reduceMotion = useReducedMotion();
@@ -38,6 +38,7 @@ export function HeroIllustration() {
         <video
           ref={skyRef}
           src="/images/hero-window.mp4"
+          poster={SKY_POSTER}
           autoPlay={!reduceMotion}
           loop
           muted

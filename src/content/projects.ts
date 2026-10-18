@@ -15,6 +15,15 @@ export type Project = {
 
 export const PROJECTS: Project[] = [
   {
+    slug: "npr",
+    featured: true,
+    title: "NPR Engine for AOV Growth & Waste Reduction",
+    subtitle: "Using recommendation logic to grow baskets without creating excess inventory",
+    context: "Blinkit · 2023",
+    metric: { value: "16% → 25%", label: "impression to add-to-cart" },
+    tags: ["Pricing & Monetization", "Growth & Activation"],
+  },
+  {
     slug: "markdown-engine",
     featured: true,
     title: "Automated Fresh Pricing & Markdown Engine",
@@ -31,15 +40,6 @@ export const PROJECTS: Project[] = [
     context: "NextLeap AI PM Fellowship (Top Fellow) capstone",
     metric: { value: "3,776", label: "customer reviews mined" },
     tags: ["Product Strategy", "0 → 1 Building"],
-  },
-  {
-    slug: "npr",
-    featured: true,
-    title: "NPR Engine for AOV Growth & Waste Reduction",
-    subtitle: "Using recommendation logic to grow baskets without creating excess inventory",
-    context: "Blinkit · 2023",
-    metric: { value: "16% → 25%", label: "impression to add-to-cart" },
-    tags: ["Pricing & Monetization", "Growth & Activation"],
   },
   {
     slug: "spotify-journeys",
