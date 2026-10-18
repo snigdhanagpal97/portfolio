@@ -38,7 +38,7 @@ export default function WorkPage() {
             >
               How I think about a product
             </h1>
-            <div className="mt-5 max-w-2xl space-y-4 text-lg leading-relaxed text-ink-70 md:text-xl">
+            <div className="mt-5 max-w-4xl space-y-4 text-lg leading-relaxed text-ink-70 md:text-xl">
               <p>
                 I&rsquo;ve worked on enough complex problems to notice that the
                 ones that go wrong usually fail at the same point. Not
@@ -47,7 +47,7 @@ export default function WorkPage() {
               </p>
               <p>
                 Over time I&rsquo;ve developed a framework I keep coming back
-                to: <strong className="text-ink">Locate, Structure, Ship.</strong>
+                to: <strong className="whitespace-nowrap text-ink">Locate, Structure, Ship.</strong>
               </p>
             </div>
           </Reveal>
