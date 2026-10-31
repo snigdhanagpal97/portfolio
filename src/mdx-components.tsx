@@ -1,5 +1,7 @@
 import type { MDXComponents } from "mdx/types";
 import { Callout, Cards, Compare, Figure, Formula, Gallery, Steps } from "@/components/case-study/blocks";
+import { AgentArchitecture, BriefFlow, DecisionTable, LessonCards } from "@/components/case-study/backpocket";
+import { BarChart, BeforeAfter, Lifecycle, Quadrant, SplitBars } from "@/components/case-study/charts";
 
 // Turns a heading's text into an anchor id, so "On this page" links work.
 const slugify = (node: React.ReactNode) =>
@@ -44,6 +46,15 @@ const components: MDXComponents = {
   Formula,
   Gallery,
   Steps,
+  AgentArchitecture,
+  BarChart,
+  BeforeAfter,
+  BriefFlow,
+  DecisionTable,
+  LessonCards,
+  Lifecycle,
+  Quadrant,
+  SplitBars,
 };
 
 export function useMDXComponents(): MDXComponents {

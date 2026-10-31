@@ -1,0 +1,204 @@
+import { SaveGraveyard } from "@/components/case-study/backpocket";
+
+export const Demo = () => <SaveGraveyard />;
+
+export const meta = {
+  demo: {
+    type: "custom",
+    link: { href: "https://github.com/snigdhanagpal97/backpocket", label: "See the code" },
+  },
+  facts: [
+    { label: "Role", value: "Product and build, solo" },
+    { label: "Timeline", value: "October 2026" },
+    { label: "Research", value: "Survey of 19 students and professionals" },
+    { label: "Built with", value: "Claude API, WhatsApp Cloud API, Next.js, Supabase, Google Apps Script" },
+  ],
+  metrics: [
+    { value: "~90%", label: "less time to find something I saved" },
+    { value: "~5% → 100%", label: "saved job posts that came back" },
+    { value: "76%", label: "of savers surveyed lost a save to bad timing" },
+    { value: "64% vs 0%", label: "job seekers vs professionals who often lose saves to timing" },
+  ],
+  tldr: {
+    problem:
+      "Instagram Saved, my gallery and my WhatsApp chat to myself had all become graveyards. Finding one thing took 10 to 30 minutes, if I found it at all.",
+    did:
+      "Surveyed 19 people, found the pain sits with job seekers, and built an AI agent on WhatsApp that answers from my saves and sends a 6 AM brief tied to my calendar and inbox.",
+    result:
+      "Finding a save went from 10 to 30 minutes to under a minute, about 90% less time, and every job post I saved came back.",
+  },
+  sections: [
+    "What the survey showed",
+    "Where people save",
+    "Who it's for",
+    "What's already out there",
+    "See it in WhatsApp",
+    "The 6 AM brief",
+    "How it works",
+    "Key decisions",
+    "What broke",
+    "Results",
+    "What I'd build next",
+  ],
+  signoff: "Personal project, designed, built and used by me",
+};
+
+## What the survey showed
+
+The goal was to bring a save back on its own, at the moment it's useful, without changing where I save things. First I wanted to know if this was just me, so I surveyed 19 students and working professionals.
+
+<Lifecycle
+  title="Where saving breaks down"
+  n="n = 19"
+  takeaway="Saving works. Everything after it doesn't, so a better place to save wouldn't fix this."
+  stages={[
+    { step: "Capture", label: "save things to come back to", value: 17, total: 19, works: true },
+    { step: "Revisit", label: "reopen more than 30% of saves", value: 4, total: 17, works: false },
+    { step: "Find", label: "found it quickly last time", value: 3, total: 17, works: false },
+    { step: "In time", label: "rarely or never too late", value: 4, total: 17, works: false },
+  ]}
+/>
+
+## Where people save
+
+People use about three places to save things, and two of them catch most of it.
+
+<BarChart
+  title="Where people save things"
+  n="Savers, n = 17"
+  takeaway="Screenshots and WhatsApp lead, so the agent lives in WhatsApp and reads images as well as links."
+  rows={[
+    { label: "Screenshots", value: 15, total: 17 },
+    { label: "WhatsApp chats", value: 11, total: 17 },
+    { label: "Instagram Saved", value: 10, total: 17 },
+    { label: "LinkedIn Saved", value: 9, total: 17 },
+    { label: "Notes app", value: 3, total: 17, dim: true },
+    { label: "Bookmarks", value: 2, total: 17, dim: true },
+    { label: "Notion", value: 2, total: 17, dim: true },
+  ]}
+/>
+
+## Who it's for
+
+Splitting the answers by who was responding changed who I built for.
+
+<SplitBars
+  title="Students and job seekers vs professionals"
+  n="n = 18"
+  groups={["Students and job seekers", "Working professionals"]}
+  takeaway="Both groups forget. Job seekers lose more, because their saves have deadlines."
+  rows={[
+    { label: "Rarely reopen what they save", values: [{ value: 8, total: 11 }, { value: 6, total: 7 }] },
+    { label: "Save job posts", values: [{ value: 9, total: 11 }, { value: 3, total: 7 }] },
+    { label: "Saved 6+ things last week", values: [{ value: 7, total: 11 }, { value: 2, total: 7 }] },
+    { label: "Often lose a save to timing", values: [{ value: 7, total: 11 }, { value: 0, total: 7 }] },
+  ]}
+/>
+
+**The job to be done:** when an opportunity or a conversation is coming up, show me what I saved about it, and nudge me until I act.
+
+## What's already out there
+
+Saving and searching with AI isn't new. But the tools I looked at either need a new app, or wait for you to come and look.
+
+<Quadrant
+  title="Where Backpocket sits"
+  subtitle="My read of how each product positions itself"
+  x={["Lives in a new app", "Lives where you already save"]}
+  y={["You go and search", "It comes back to you"]}
+  points={[
+    { name: "Recall", x: 16, y: 38 },
+    { name: "TapFold", x: 28, y: 16 },
+    { name: "The Saved", x: 42, y: 32 },
+    { name: "Ricorda", x: 24, y: 70 },
+    { name: "Stashr", x: 64, y: 28 },
+    { name: "Saved tabs", x: 84, y: 14 },
+    { name: "Backpocket", x: 78, y: 76, highlight: true },
+  ]}
+/>
+
+## See it in WhatsApp
+
+You share to the agent like any contact. There are no commands to learn: you save, ask, or reply with what you did.
+
+<Gallery
+  columns={3}
+  images={[
+    { src: "/images/case-studies/backpocket/hero.png", width: 920, height: 995, alt: "A question about a Tech PM casing session, answered in a reply that quotes the photo of the slide", caption: "Ask: the answer quotes the slide I saved" },
+    { src: "/images/case-studies/backpocket/03-list.png", width: 920, height: 1312, alt: "Asking for internships pending to apply, answered with a numbered list of saved job posts and their links", caption: "List: what's still waiting, numbered to reply" },
+    { src: "/images/case-studies/backpocket/02-ask.png", width: 1206, height: 1210, alt: "A question about what a successful interview looks like, answered in a reply that quotes the saved slide", caption: "Find: an old slide, back in seconds" },
+  ]}
+/>
+
+## The 6 AM brief
+
+Search only helps if you remember to look. So every morning, the agent reads my calendar and inbox and sends one message with what matters today.
+
+<BriefFlow />
+
+## How it works
+
+Every message runs through the same pipeline. Claude handles each judgment through its own tool with a strict schema, and every answer is validated before it's used.
+
+<AgentArchitecture />
+
+<Cards
+  items={[
+    { title: "Eight focused tools", body: "Routing, cards, answers, lists, screenshot checks, prep picks and email matching each get their own Claude tool." },
+    { title: "Checks its own output", body: "Every model response is validated. If it fails, the agent retries once, then replies with a friendly error." },
+    { title: "Safe by default", body: "Signed requests only, an allowlist of numbers, no repeat saves when Meta retries, and each person's data kept separate." },
+  ]}
+/>
+
+## Key decisions
+
+<DecisionTable
+  rows={[
+    { chose: "WhatsApp only", over: "A new app", why: "65% of savers already save there. The cost: no visual library, so every answer has to work as a chat message." },
+    { chose: "One answer, with its source", over: "A list of matches", why: "A list is still search with extra steps. The risk is a wrong answer, so each reply quotes the original message to check in one tap." },
+    { chose: "Ask for a screenshot", over: "Scraping behind a login", why: "One extra step when LinkedIn or Instagram hides a post, but no account gets flagged." },
+    { chose: "A script in my own Google account", over: "Sign in with Google", why: "Gmail access needs a paid security assessment, and without one the login expires every 7 days. The cost: each new user installs their own copy." },
+    { chose: "No brief on quiet days", over: "A message every day", why: "A brief that's empty half the time teaches you to ignore it." },
+  ]}
+/>
+
+## What broke
+
+I used it on my own saves from day one. Every fix came from something going wrong.
+
+<LessonCards
+  items={[
+    { icon: "question", title: "Questions saved as notes", broke: "\"Can you share all the internships I haven't applied to\" got saved as a note.", now: "Claude reads what each message is for, not its punctuation." },
+    { icon: "shorten", title: "Answers too long", broke: "First answers restated the whole save in 500+ characters.", now: "They lead with the answer, in about 200." },
+    { icon: "link", title: "Wrong message quoted", broke: "A slide sent seconds after a hidden job link got merged into it, so answers quoted the wrong message.", now: "A screenshot only attaches if it actually shows that link." },
+    { icon: "list", title: "Two actions in one message", broke: "\"1 skip, 3 applied\" only recorded the skip, and an application was lost.", now: "Each item gets its own action." },
+    { icon: "doc", title: "LinkedIn posts cut short", broke: "Link previews stop after a few hundred characters.", now: "It reads the full public post or job description." },
+    { icon: "bell", title: "Reminders were slow", broke: "Reminders alone were slow to turn into applications.", now: "They're numbered, so one short reply is enough." },
+  ]}
+/>
+
+## Results
+
+**North star:** the share of saves that come back at a useful moment and get acted on.
+
+<BeforeAfter
+  title="Before and after"
+  n="My own use, first two weeks"
+  note="Before figures are my own estimates. Retrieval is for saved job posts; across all saves, 53% came back."
+  rows={[
+    { label: "Time to find a save", before: 100, after: 8, beforeLabel: "10 to 30 min", afterLabel: "Under 1 min" },
+    { label: "Job posts that came back", before: 5, after: 100, beforeLabel: "~5%", afterLabel: "100%" },
+  ]}
+/>
+
+I've also acted on half the job posts I saved: applied, or skipped on purpose.
+
+## What I'd build next
+
+<Cards
+  items={[
+    { tag: "Next", title: "Test with 5 job seekers", body: "So far it's only me. The question is whether saving sticks past the first week." },
+    { tag: "Then", title: "One-tap actions", body: "Applied and Skip buttons on every reminder, so acting takes a tap instead of a typed reply." },
+    { tag: "Later", title: "Reels", body: "Read a reel's public caption, and keep the screenshot for everything else." },
+  ]}
+/>

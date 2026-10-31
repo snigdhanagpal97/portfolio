@@ -51,6 +51,14 @@ export const PROJECTS: Project[] = [
     tags: ["Product Strategy", "AI & No-Code MVP"],
   },
   {
+    slug: "backpocket",
+    title: "Backpocket: An AI Agent for Everything You Save",
+    subtitle: "A WhatsApp agent that turns forgotten saves into answers, prep and applications",
+    context: "Personal project · 2026",
+    metric: { value: "~90%", label: "less time to find something I saved" },
+    tags: ["0 → 1 Building", "Product Strategy"],
+  },
+  {
     slug: "delisting",
     title: "Assortment Rationalisation Framework for Dark Stores",
     subtitle: "Balancing efficiency, profitability, and customer choice",

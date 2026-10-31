@@ -146,11 +146,13 @@ export function Formula({ children }: { children: React.ReactNode }) {
 
 export function Gallery({
   images,
+  columns = 2,
 }: {
   images: { src: string; alt: string; width: number; height: number; caption?: string }[];
+  columns?: 2 | 3;
 }) {
   return (
-    <div className="my-8 grid max-w-3xl grid-cols-2 gap-4">
+    <div className={`my-8 grid gap-4 ${columns === 3 ? "items-start sm:grid-cols-3" : "max-w-3xl grid-cols-2"}`}>
       {images.map((im) => (
         <figure key={im.src}>
           <Zoomable src={im.src} alt={im.alt}>
