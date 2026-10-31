@@ -23,6 +23,7 @@ const nextConfig: NextConfig = {
       { source: "/liquidation", destination: "/work/markdown-engine", permanent: true },
       { source: "/delistingframework", destination: "/work/delisting", permanent: true },
       { source: "/spotifycasenextleap", destination: "/work/spotify-journeys", permanent: true },
+      { source: "/resume.pdf", destination: "/Snigdha_Nagpal_Resume.pdf", permanent: true },
     ];
   },
 };

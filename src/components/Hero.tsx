@@ -87,7 +87,8 @@ export function Hero() {
             </Link>
             <a
               href={RESUME.href}
-              download={RESUME.filename}
+              target="_blank"
+              rel="noopener"
               className="group transition-colors hover:text-purple-600"
             >
               View Resume{" "}

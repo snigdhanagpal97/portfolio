@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, Inter, Playfair_Display, Shantell_Sans } from "next/font/google";
+import { CursorGlow } from "@/components/CursorGlow";
 import { MotionProvider } from "@/components/MotionProvider";
 import { Nav } from "@/components/Nav";
 import "./globals.css";
@@ -50,6 +51,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body className="min-h-full flex flex-col">
         <MotionProvider>
+          <CursorGlow />
           <Nav />
           {children}
         </MotionProvider>

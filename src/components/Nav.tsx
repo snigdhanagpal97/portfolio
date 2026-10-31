@@ -61,7 +61,8 @@ export function Nav() {
           <li>
             <a
               href={RESUME.href}
-              download={RESUME.filename}
+              target="_blank"
+              rel="noopener"
               className="relative py-1 transition-colors hover:text-purple-600"
             >
               Resume
