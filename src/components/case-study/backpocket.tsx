@@ -2,6 +2,8 @@
 // morning brief flow, and the lesson cards. Real text and simple line icons,
 // so they stay sharp and readable at any size.
 
+import { DemoVideo } from "@/components/case-study/DemoVideo";
+
 const ICONS = {
   film: "M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM7 4v16M17 4v16M2 12h20M2 8h5M2 16h5M17 8h5M17 16h5",
   image: "M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zM8.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM21 15l-5-5L5 21",
@@ -302,5 +304,20 @@ export function DecisionTable({ rows }: { rows: { chose: string; over: string; w
         ))}
       </ul>
     </div>
+  );
+}
+
+/** The real chat, played like a phone in the middle of the page. */
+export function WhatsAppDemo() {
+  return (
+    <figure className="my-8 overflow-hidden rounded-panel border border-black/10">
+      <div className="flex justify-center bg-[linear-gradient(135deg,#f4f1fa,#fafafa)] px-4 py-6 md:py-10">
+        <DemoVideo
+          src="/images/case-studies/backpocket/demo.mp4"
+          label="Screen recording of Backpocket in WhatsApp: asking for a list, marking one applied, and getting a saved reel back"
+          portrait
+        />
+      </div>
+    </figure>
   );
 }
