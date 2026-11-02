@@ -63,18 +63,27 @@ const GRAVEYARDS: { icon: IconName; place: string; label: string; items: string[
   },
 ];
 
-/** The problem, as a picture: where saves go, and what happens to them. */
+/** The header: the problem as a picture, beside the agent working in WhatsApp. */
 export function SaveGraveyard() {
   return (
-    <div className="bg-surface-50 p-5 md:p-8">
+    <div className="grid gap-6 bg-surface-50 p-5 md:p-8 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-10">
+      <figure className="order-first flex flex-col items-center lg:order-last">
+        <DemoVideo
+          src="/images/case-studies/backpocket/demo.mp4"
+          label="Screen recording of Backpocket in WhatsApp: asking for a list, marking one applied, and getting a saved reel back"
+          portrait
+        />
+        <figcaption className="mt-3 text-sm text-ink-52">The agent, live in my WhatsApp</figcaption>
+      </figure>
+      <div>
       <div className="flex items-baseline justify-between gap-4">
         <p className="text-[13px] font-semibold uppercase tracking-[0.14em] text-ink-80">Where my saves went to die</p>
         <p className="text-sm italic text-ink-52">Before Backpocket</p>
       </div>
 
-      <ul className="mt-6 grid gap-3 md:grid-cols-3">
+      <ul className="mt-6 grid gap-3 md:grid-cols-3 lg:grid-cols-1">
         {GRAVEYARDS.map((g) => (
-          <li key={g.place} className="rounded-card border-l-4 border-purple-600 bg-white p-5 shadow-sm">
+          <li key={g.place} className="rounded-card border-l-4 border-purple-600 bg-white p-4 shadow-sm">
             <div className="flex items-center gap-3">
               <IconBadge name={g.icon} />
               <div>
@@ -82,7 +91,7 @@ export function SaveGraveyard() {
                 <p className="text-sm text-ink-60">{g.place}</p>
               </div>
             </div>
-            <ul className="mt-4 space-y-1.5 text-[15px] leading-snug text-ink-70">
+            <ul className="mt-3 space-y-1 text-[15px] leading-snug text-ink-70">
               {g.items.map((item) => (
                 <li key={item} className="flex gap-2">
                   <span className="mt-[9px] h-1 w-1 shrink-0 rounded-full bg-ink-52" />
@@ -121,8 +130,9 @@ export function SaveGraveyard() {
           href="#see-it-in-whatsapp"
           className="shrink-0 rounded-pill bg-purple-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-purple-800"
         >
-          See it in WhatsApp ↓
+          See the screenshots ↓
         </a>
+      </div>
       </div>
     </div>
   );
