@@ -52,6 +52,7 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "backpocket",
+    featured: true,
     title: "Backpocket: An AI Agent for Everything You Save",
     subtitle: "A WhatsApp agent that turns forgotten saves into answers, prep and applications",
     context: "Personal project · 2026",
