@@ -53,9 +53,12 @@ export function SaveStory() {
 
   return (
     <div ref={ref} className="flex min-h-0 flex-1 flex-col">
-      <div className="flex items-baseline justify-between gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="text-[13px] font-semibold uppercase tracking-[0.14em] text-ink-80">Where my saves went to die</p>
-        <p className="text-sm italic text-ink-52">Before Backpocket</p>
+        <p className="inline-flex items-center gap-2 rounded-pill bg-[#fbeee9] px-3.5 py-1.5 text-sm font-bold text-[#b4441a]">
+          <span className="h-2 w-2 rounded-full bg-[#e0582a]" aria-hidden />
+          Before Backpocket
+        </p>
       </div>
 
       {/* Step tabs, each with a progress line like a story */}

@@ -25,7 +25,7 @@ export function SaveGraveyard() {
             ✓
           </span>
           <span className="leading-tight">
-            <span className="block text-xs font-semibold uppercase tracking-[0.12em] text-white/75">Solved with Backpocket</span>
+            <span className="block text-sm font-bold uppercase tracking-[0.1em] text-[#d9cff5]">After · Solved with Backpocket</span>
             <span className="font-display text-base font-bold md:text-lg">
               View the live solution in action{" "}
               <span className="inline-block transition-transform motion-safe:group-hover:translate-y-0.5">↓</span>
