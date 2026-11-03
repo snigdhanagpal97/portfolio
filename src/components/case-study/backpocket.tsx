@@ -21,12 +21,16 @@ export function SaveGraveyard() {
           href="#see-it-in-whatsapp"
           className="group inline-flex shrink-0 items-center gap-3 self-start rounded-pill bg-purple-600 py-2 pl-2 pr-6 text-white shadow-[0_14px_30px_-12px_rgb(83_65_132/0.8)] transition-colors hover:bg-purple-800 md:self-auto"
         >
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-lg font-bold text-purple-600" aria-hidden>
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#e3f4e8] text-lg font-bold text-[#1d7a3e]" aria-hidden>
             ✓
           </span>
           <span className="leading-tight">
-            <span className="block text-sm font-bold uppercase tracking-[0.1em] text-[#d9cff5]">After · Solved with Backpocket</span>
-            <span className="font-display text-base font-bold md:text-lg">
+            {/* Green to answer the orange Before Backpocket pill at the top */}
+            <span className="mb-1.5 inline-flex items-center gap-2 whitespace-nowrap rounded-pill bg-[#e3f4e8] px-2.5 py-1 text-xs font-bold md:px-3 md:text-sm text-[#1d7a3e]">
+              <span className="h-2 w-2 rounded-full bg-[#2f9e57]" aria-hidden />
+              After · Solved with Backpocket
+            </span>
+            <span className="block font-display text-base font-bold md:text-lg">
               View the live solution in action{" "}
               <span className="inline-block transition-transform motion-safe:group-hover:translate-y-0.5">↓</span>
             </span>
