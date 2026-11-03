@@ -11,6 +11,7 @@ export type Project = {
   tags: string[];
   draft?: boolean; // hidden from the site until it's ready
   featured?: boolean; // shown in the home page stack
+  first?: boolean; // goes to the front of that stack
 };
 
 export const PROJECTS: Project[] = [
@@ -53,6 +54,7 @@ export const PROJECTS: Project[] = [
   {
     slug: "backpocket",
     featured: true,
+    first: true,
     title: "Backpocket: An AI Agent for Everything You Save",
     subtitle: "A WhatsApp agent that turns forgotten saves into answers, prep and applications",
     context: "Personal project · 2026",
@@ -81,7 +83,7 @@ export const PROJECTS: Project[] = [
 // What visitors see: everything except drafts.
 export const PUBLISHED = PROJECTS.filter((p) => !p.draft);
 
-// The home page stack.
-export const FEATURED = PUBLISHED.filter((p) => p.featured);
+// The home page stack, with any project marked first at the front.
+export const FEATURED = PUBLISHED.filter((p) => p.featured).sort((a, b) => Number(!!b.first) - Number(!!a.first));
 
 export const getProject = (slug: string) => PROJECTS.find((p) => p.slug === slug);
